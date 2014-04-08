@@ -1,19 +1,31 @@
 {
-  "name": "c-dns",
-  "version": "0.0.1",
+  "name": "edns",
+  "version": "0.0.3",
   "description": "A dns server for easy configue",
   "main": "index.js",
   "bin":{
-    "cdns":"./bin/cdns.js"
+    "edns":"./bin/edns.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "allenm",
+  "author": {
+      "name":"allenm",
+      "email":"menghonglun@gmail.com",
+      "url":"http://blog.allenm.me"
+  },
+  "repository":{
+    "type":"git",
+    "url":"https://github.com/allenm/edns.git"
+  },
+  "bugs":{
+    "url":"https://github.com/allenm/edns/issues",
+    "email":"menghonglun@gmail.com"
+  },
   "dependencies":{
     "native-dns":">=0.4.1",
     "ipaddr.js":">= 0.1.1",
     "commander":"*"
   },
-  "license": "BSD-2-Clause"
+  "license": "BSD-3-Clause"
 }

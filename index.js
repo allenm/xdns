@@ -12,14 +12,14 @@ var tcpServer = dns.createTCPServer();
 var server = dns.createServer();
 var remoteDns = '8.8.8.8';
 
-var chosts = require('./chosts');
+var ehosts = require('./ehosts');
 
 var onMessage = function(request,response){
 
 
     var name = request.question[0].name;
 
-    var localMatch = chosts.query(name);
+    var localMatch = ehosts.query(name);
     if(localMatch){
         console.log('local matched, resolve '+ name + ' to '+ localMatch);
         response.answer.push(dns.A({
@@ -69,9 +69,14 @@ var onError = function(err,buff,req,res){
     console.log(err.stack);
 }
 
-var onListening = function(){
-    console.log('server listening on', this.address());
+var onUDPListening = function(){
+    console.log('UDP server listening on', this.address());
 }
+
+var onTCPListening = function(){
+    console.log('TCP server listening on', this.address());
+}
+
 
 var onSocketError = function(err,socket){
     console.log(err);
@@ -83,13 +88,13 @@ var onClose = function(){
 
 server.on('request',onMessage);
 server.on('error',onError);
-server.on('listening',onListening);
+server.on('listening',onUDPListening);
 server.on('socketError',onSocketError);
 server.on('close',onClose);
 
 tcpServer.on('request',onMessage);
 tcpServer.on('error',onError);
-tcpServer.on('listening',onListening);
+tcpServer.on('listening',onTCPListening);
 tcpServer.on('socketError',onSocketError);
 tcpServer.on('close',onClose);
 
@@ -134,7 +139,7 @@ exports.init = function(config){
         hostsFile = path.resolve(hostsFile);
     }
 
-    chosts.init(hostsFile);
+    ehosts.init(hostsFile);
     server.serve(listenPort);
     tcpServer.serve(listenPort);
 }

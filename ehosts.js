@@ -4,7 +4,7 @@
 var fs = require('fs');
 var ipaddr = require('ipaddr.js');
 
-var defaultHosts = getUserHome() + '/.cdns';
+var defaultHosts = getUserHome() + '/.edns';
 
 var staticHosts = {};
 var smartHosts = [];
