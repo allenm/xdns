@@ -31,7 +31,7 @@ function query(host){
     return result;
 }
 
-function init(fpath){
+function initWithFile(fpath){
 
     var fpath = fpath || defaultHosts;
 
@@ -39,38 +39,42 @@ function init(fpath){
         encoding:'utf-8'
     },function(err,data){
         if(err){
-            console.error('read cdns hosts file error: ',err);
+            console.error('read edns hosts file error: ',err);
             return;
         }
-        var tmp = data.split('\n');
-        tmp.forEach(function(item,i){
-            var line = item.trim();
-            if(line.length === 0){
-                return;
-            }
-            if(line.charAt(0)==='#'){
-                return;
-            }
-            var params = line.split(' ');
-            var ip = params.shift().trim();
-            if(!ipaddr.isValid(ip)){
-                console.log('parse hosts file error: ', ip + ' is not a valid ip address.')
-                return;
-            }
-            params.forEach(function(item,i){
-                var host = item.trim();
-                if(/\*/.test(host)){ // wildcard mode
-                    var reg = new RegExp('^'+ host.replace(/\./g,'\\.').replace('*','.*') +'$');
-                    smartHosts.push([reg,ip]);
-                }else{ // explicit host mode
-                    staticHosts[host] = ip;
-                }
-            });
-
-        })
+        var hostsArr = data.split('\n');
+        initWithArr(hostsArr);
     })
 
 }
 
-exports.init = init;
+function initWithArr(arr){
+    arr.forEach(function(item,i){
+        var line = item.trim();
+        if(line.length === 0){
+            return;
+        }
+        if(line.charAt(0)==='#'){
+            return;
+        }
+        var params = line.split(' ');
+        var ip = params.shift().trim();
+        if(!ipaddr.isValid(ip)){
+            console.log('parse hosts file error: ', ip + ' is not a valid ip address.')
+            return;
+        }
+        params.forEach(function(item,i){
+            var host = item.trim();
+            if(/\*/.test(host)){ // wildcard mode
+                var reg = new RegExp('^'+ host.replace(/\./g,'\\.').replace('*','.*') +'$');
+                smartHosts.push([reg,ip]);
+            }else{ // explicit host mode
+                staticHosts[host] = ip;
+            }
+        });
+    })
+}
+
+exports.initWithFile = initWithFile;
+exports.initWithArr = initWithArr;
 exports.query = query;

@@ -105,6 +105,7 @@ function getUserHome() {
 exports.init = function(config){
 
     var hostsFile = '';
+    var hostsArr = config.hostsArr || [];
     if(config.dns){
         if(!ipaddr.isVaid(config.dns)){
             console.error( config.dns + ' is not a valid ip address');
@@ -139,7 +140,8 @@ exports.init = function(config){
         hostsFile = path.resolve(hostsFile);
     }
 
-    ehosts.init(hostsFile);
+    ehosts.initWithFile(hostsFile);
+    ehosts.initWithArr(hostsArr);
     server.serve(listenPort);
     tcpServer.serve(listenPort);
 }
