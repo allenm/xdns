@@ -10,5 +10,6 @@ var hostsArr = [
 ]
 
 edns.init({
-    hostsArr:hostsArr
+    hostsArr:hostsArr,
+    dns:'8.8.8.8'
 })

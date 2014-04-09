@@ -107,7 +107,7 @@ exports.init = function(config){
     var hostsFile = '';
     var hostsArr = config.hostsArr || [];
     if(config.dns){
-        if(!ipaddr.isVaid(config.dns)){
+        if(!ipaddr.isValid(config.dns)){
             console.error( config.dns + ' is not a valid ip address');
             return;
         }
