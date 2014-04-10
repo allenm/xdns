@@ -11,15 +11,18 @@ npm install edns -g
 
 ### 使用
 
-在当前用户根目录创建文件 `~/.edns` 作为 edns 配置文件。 此配置文件完全兼容 hosts 文件的写法，另外还支持通配符，例如：
+在当前用户根目录创建文件 `~/.edns` 作为 edns 配置文件。 此配置文件完全兼容 hosts 文件的写法，另外还支持通配符以及网卡接口名自动替换，例如：
 
 ```
 127.0.0.1 www.baidu.com
 127.0.0.1 a.xxcdn.cn b.xxcdn.cn
 127.0.0.1 *.yycdn.cn
+$en0$ www.qq.com
 ```
 
 以上的写法都是支持的，www.baidu.com a.xxcdn.cn b.xxcdn.cn 以及根域名为 yycdn.cn 的域名都会被解析到 127.0.0.1
+
+`$en0$` 会被替换成当前机器上名为 `en0` 的网卡接口上的 IPv4 地址。
 
 写好配置文件后，使用 `sudo edns` 启动 edns（因为 DNS Server 运行在 53 端口，所以需要 root 权限），设置你的手机或者其他设备 DNS 为运行 edns 的电脑 IP 即可。
 

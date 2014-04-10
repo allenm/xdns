@@ -2,6 +2,7 @@
 "use strict"
 
 var fs = require('fs');
+var os = require('os');
 var ipaddr = require('ipaddr.js');
 
 var defaultHosts = getUserHome() + '/.edns';
@@ -59,6 +60,26 @@ function initWithArr(arr){
         }
         var params = line.split(' ');
         var ip = params.shift().trim();
+        if(/^\$.*\$$/.test(ip)){ // use local ip
+            var iname = ip.replace(/\$/g,'');
+            var interfaces = os.networkInterfaces();
+            var haveFinded = Object.keys(interfaces).some(function(key,i){
+                if(key === iname){
+                    var network = interfaces[key];
+                    return network.some(function(item,i){
+                        if(item.family === 'IPv4'){
+                            ip = item.address;
+                            console.log('replace $'+iname+'$ to '+ ip + ' successful!');
+                            return true;
+                        }
+                    })
+                }
+            })
+            if(!haveFinded){
+                console.log('can\'t find out '+iname+'\'s IPv4 address, please check!');
+                return;
+            }
+        }
         if(!ipaddr.isValid(ip)){
             console.log('parse hosts file error: ', ip + ' is not a valid ip address.')
             return;
