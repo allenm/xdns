@@ -5,6 +5,21 @@ var dns = require('native-dns');
 var ipaddr = require('ipaddr.js');
 var path = require('path');
 var fs = require('fs');
+var colors = require('colors');
+
+colors.setTheme({
+    silly: 'rainbow',
+    input: 'grey',
+    verbose: 'cyan',
+    prompt: 'grey',
+    info: 'green',
+    data: 'grey',
+    help: 'cyan',
+    warn: 'yellow',
+    debug: 'blue',
+    error: 'red'
+});
+
 
 var listenPort = 53;
 
@@ -70,11 +85,11 @@ var onError = function(err,buff,req,res){
 }
 
 var onUDPListening = function(){
-    console.log('UDP server listening on', this.address());
+    console.log('UDP server listening on'.info, this.address());
 }
 
 var onTCPListening = function(){
-    console.log('TCP server listening on', this.address());
+    console.log('TCP server listening on'.info, this.address());
 }
 
 
@@ -142,6 +157,21 @@ exports.init = function(config){
 
     ehosts.initWithFile(hostsFile);
     ehosts.initWithArr(hostsArr);
+
+    var allHosts = ehosts.getAllHosts();
+    console.log('-------------------');
+    if(allHosts.length>0){
+        console.log('The hosts list you config is: '.info);
+        allHosts.forEach(function(item){
+            console.log(item);
+        })
+        console.log('-------------------');
+    }else{
+        console.log('You havn\'t bind any hosts yet!'.warn)
+    }
+
+
+
     server.serve(listenPort);
     tcpServer.serve(listenPort);
 }

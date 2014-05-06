@@ -1,6 +1,6 @@
 {
   "name": "edns",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A dns server for easy configue",
   "main": "index.js",
   "bin":{
@@ -25,7 +25,8 @@
   "dependencies":{
     "native-dns":">=0.4.1",
     "ipaddr.js":">= 0.1.1",
-    "commander":"*"
+    "commander":"*",
+    "colors":"*"
   },
   "license": "BSD-3-Clause"
 }

@@ -5,6 +5,21 @@ var fs = require('fs');
 var os = require('os');
 var ipaddr = require('ipaddr.js');
 
+var colors = require('colors');
+
+colors.setTheme({
+    silly: 'rainbow',
+    input: 'grey',
+    verbose: 'cyan',
+    prompt: 'grey',
+    info: 'green',
+    data: 'grey',
+    help: 'cyan',
+    warn: 'yellow',
+    debug: 'blue',
+    error: 'red'
+});
+
 var defaultHosts = getUserHome() + '/.edns';
 
 var staticHosts = {};
@@ -32,20 +47,32 @@ function query(host){
     return result;
 }
 
+function getAllHosts(){
+    var all = [];
+    Object.keys(staticHosts).forEach(function(item,i){
+        all.push(staticHosts[item] + ' '+ item);
+    })
+    smartHosts.forEach(function(item,i){
+        all.push(item[1] + ' ' +item[2]);
+    })
+
+    return all;
+}
+
 function initWithFile(fpath){
 
     var fpath = fpath || defaultHosts;
 
-    fs.readFile(fpath,{
-        encoding:'utf-8'
-    },function(err,data){
-        if(err){
-            console.error('read edns hosts file error: ',err);
-            return;
-        }
+    try{
+        var data = fs.readFileSync(fpath,{
+            encoding:'utf-8'
+        });
         var hostsArr = data.split('\n');
         initWithArr(hostsArr);
-    })
+    }catch(e){
+
+    }
+
 
 }
 
@@ -69,26 +96,26 @@ function initWithArr(arr){
                     return network.some(function(item,i){
                         if(item.family === 'IPv4'){
                             ip = item.address;
-                            console.log('replace $'+iname+'$ to '+ ip + ' successful!');
+                            console.log('replace $'+iname+'$ to '+ ip + ' successful!'.info);
                             return true;
                         }
                     })
                 }
             })
             if(!haveFinded){
-                console.log('can\'t find out '+iname+'\'s IPv4 address, please check!');
+                console.log('can\'t find out '+iname+'\'s IPv4 address, please check!'.warn);
                 return;
             }
         }
         if(!ipaddr.isValid(ip)){
-            console.log('parse hosts file error: ', ip + ' is not a valid ip address.')
+            console.log('parse hosts file error: ', ip + ' is not a valid ip address.'.warn)
             return;
         }
         params.forEach(function(item,i){
             var host = item.trim();
             if(/\*/.test(host)){ // wildcard mode
                 var reg = new RegExp('^'+ host.replace(/\./g,'\\.').replace('*','.*') +'$');
-                smartHosts.push([reg,ip]);
+                smartHosts.push([reg,ip,host]);
             }else{ // explicit host mode
                 staticHosts[host] = ip;
             }
@@ -98,4 +125,5 @@ function initWithArr(arr){
 
 exports.initWithFile = initWithFile;
 exports.initWithArr = initWithArr;
+exports.getAllHosts = getAllHosts;
 exports.query = query;
