@@ -96,19 +96,22 @@ function initWithArr(arr){
                     return network.some(function(item,i){
                         if(item.family === 'IPv4'){
                             ip = item.address;
-                            console.log('replace $'+iname+'$ to '+ ip + ' successful!'.info);
+                            var log = 'replace $'+iname+'$ to '+ ip + ' successful!';
+                            console.log(log.info);
                             return true;
                         }
                     })
                 }
             })
             if(!haveFinded){
-                console.log('can\'t find out '+iname+'\'s IPv4 address, please check!'.warn);
+                var log = 'can\'t find out '+iname+'\'s IPv4 address, please check!';
+                console.log(log.warn);
                 return;
             }
         }
         if(!ipaddr.isValid(ip)){
-            console.log('parse hosts file error: ', ip + ' is not a valid ip address.'.warn)
+            var log = 'parse hosts file error: '+ ip + ' is not a valid ip address.';
+            console.log(log.warn)
             return;
         }
         params.forEach(function(item,i){

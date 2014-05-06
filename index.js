@@ -36,7 +36,7 @@ var onMessage = function(request,response){
 
     var localMatch = ehosts.query(name);
     if(localMatch){
-        console.log('local matched, resolve '+ name + ' to '+ localMatch);
+        console.log('>>'.info + 'local matched, resolve '+ name + ' to '+ localMatch);
         response.answer.push(dns.A({
             name: name,
             address: localMatch,
@@ -55,7 +55,7 @@ var onMessage = function(request,response){
         });
 
         req.on('timeout', function () {
-            console.log('Timeout in making request for: ', name);
+            console.log('>>'.warn + 'Timeout in making request for: ', name);
         });
 
         req.on('message', function (err, answer) {
@@ -123,7 +123,8 @@ exports.init = function(config){
     var hostsArr = config.hostsArr || [];
     if(config.dns){
         if(!ipaddr.isValid(config.dns)){
-            console.error( config.dns + ' is not a valid ip address');
+            var log = config.dns + ' is not a valid ip address'
+            console.error(log.error);
             return;
         }
         remoteDns = config.dns;
@@ -145,10 +146,11 @@ exports.init = function(config){
                 }
             })
         }catch(e){
-            console.warn('Get current network\'s DNS failure');
+            console.log('Get current network\'s DNS failure'.warn);
         }
     }
-    console.log('The remote dns is : ' + remoteDns);
+    var log = 'The remote dns is : ' + remoteDns
+    console.log(log.info);
 
     if(config.file){
         hostsFile = config.file.replace(/^~\//,getUserHome());
