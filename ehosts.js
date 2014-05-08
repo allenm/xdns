@@ -5,20 +5,7 @@ var fs = require('fs');
 var os = require('os');
 var ipaddr = require('ipaddr.js');
 
-var colors = require('colors');
-
-colors.setTheme({
-    silly: 'rainbow',
-    input: 'grey',
-    verbose: 'cyan',
-    prompt: 'grey',
-    info: 'green',
-    data: 'grey',
-    help: 'cyan',
-    warn: 'yellow',
-    debug: 'blue',
-    error: 'red'
-});
+require('./customcolors');
 
 var defaultHosts = getUserHome() + '/.edns';
 
