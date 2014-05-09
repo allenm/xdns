@@ -5,20 +5,8 @@ var dns = require('native-dns');
 var ipaddr = require('ipaddr.js');
 var path = require('path');
 var fs = require('fs');
-var colors = require('colors');
 
-colors.setTheme({
-    silly: 'rainbow',
-    input: 'grey',
-    verbose: 'cyan',
-    prompt: 'grey',
-    info: 'green',
-    data: 'grey',
-    help: 'cyan',
-    warn: 'yellow',
-    debug: 'blue',
-    error: 'red'
-});
+require('./customcolors');
 
 
 var listenPort = 53;
