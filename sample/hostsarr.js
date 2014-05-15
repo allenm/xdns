@@ -1,7 +1,7 @@
 
 'use strict'
 
-var edns = require('../index');
+var xdns = require('../index');
 
 var hostsArr = [
     '127.0.0.1 xx.cdn.cn yy.cdn.cn',
@@ -9,7 +9,7 @@ var hostsArr = [
     '$en0$ www.baidu.com'
 ]
 
-edns.init({
+xdns.init({
     hostsArr:hostsArr,
     dns:'8.8.8.8'
 })

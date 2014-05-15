@@ -1,10 +1,10 @@
 {
-  "name": "edns",
-  "version": "0.0.8",
-  "description": "A dns server for easy configue",
+  "name": "xdns",
+  "version": "0.0.9",
+  "description": "A DNS server for web / app developers . Easy to config.",
   "main": "index.js",
   "bin":{
-    "edns":"./bin/edns.js"
+    "xdns":"./bin/xdns.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,10 +16,10 @@
   },
   "repository":{
     "type":"git",
-    "url":"https://github.com/allenm/edns.git"
+    "url":"https://github.com/allenm/xdns.git"
   },
   "bugs":{
-    "url":"https://github.com/allenm/edns/issues",
+    "url":"https://github.com/allenm/xdns/issues",
     "email":"menghonglun@gmail.com"
   },
   "dependencies":{
