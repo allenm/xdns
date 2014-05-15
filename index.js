@@ -19,11 +19,11 @@ var ehosts = require('./ehosts');
 
 var onMessage = function(request,response){
 
-
     var name = request.question[0].name;
+    var type = request.question[0].type;
 
     var localMatch = ehosts.query(name);
-    if(localMatch){
+    if(type ===1 && localMatch){ // type === 1 表明是 A 记录
         console.log('>>'.info + 'local matched, resolve '+ name + ' to '+ localMatch);
         response.answer.push(dns.A({
             name: name,
@@ -34,38 +34,62 @@ var onMessage = function(request,response){
     }else{
         var question = dns.Question({
             name: name,
-            type: 'A'
-        });
-        var req = dns.Request({
-            question: question,
-            server:{address: remoteDns, port: 53, type: 'udp'},
-            timeout: 1000
+            type: type
         });
 
-        req.on('timeout', function () {
-            console.log('>>'.warn + 'Timeout in making request for: ', name);
-        });
-
-        req.on('message', function (err, answer) {
-            answer.answer.forEach(function (a) {
-                if(a.address){
-                    response.answer.push(dns.A({
-                        name: name,
-                        address: a.address,
-                        ttl: 600
-                    }));
-                    return true;
-                }
-            });
-        });
-
-        req.on('end', function () {
+        var handleAnswer = function(answers){
+            answers.forEach(function(item){
+                response.answer = response.answer.concat(item.answer);
+                response.additional = response.additional.concat(item.additional);
+            })
             response.send();
-        });
+        }
 
-        req.send();
+        queryByProtocol(question,'udp',function(err,answers){
+            if(err){
+                queryByProtocol(question,'tcp',function(err,answers){
+                    if(err){
+                        console.log('>>'.warn + ' can\'t resolve '+name);
+                    }else{
+                        handleAnswer(answers);
+                    }
+                })
+            }else{
+                handleAnswer(answers);
+            }
+        });
     }
 
+}
+
+function queryByProtocol(question,protocol,callback){
+    var req = dns.Request({
+        question: question,
+        server:{address: remoteDns, port: 53, type: protocol},
+        timeout: 3000
+    });
+
+
+    req.on('timeout', function () {
+    });
+
+    var answers = [];
+    req.on('message', function (err, answer) {
+        if(err){
+            return;
+        }
+        answers.push(answer);
+    });
+
+    req.on('end', function () {
+        if(answers.length > 0){
+            callback(null,answers);
+        }else{
+            callback(new Error('no result'),null);
+        }
+    });
+
+    req.send();
 }
 
 var onError = function(err,buff,req,res){
