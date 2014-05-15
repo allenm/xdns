@@ -7,7 +7,7 @@ var ipaddr = require('ipaddr.js');
 
 require('./customcolors');
 
-var defaultHosts = getUserHome() + '/.edns';
+var defaultHosts = getUserHome() + '/.xdns';
 
 var staticHosts = {};
 var smartHosts = [];

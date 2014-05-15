@@ -44,3 +44,8 @@ config 支持的配置项有：
 * file xdns 配置文件的地址
 * dns 远程的 DNS server
 * hostsArr 包含 hosts 配置的数组，例如 `['127.0.0.1 www.baidu.com']` ，可以参考 sample/hostsarr.js
+
+
+### 改名
+
+之前叫 edns , 但是 edns 已经有了 “Extension mechanisms for DNS” 的意思，所以更名为 xdns

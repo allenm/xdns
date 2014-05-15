@@ -1,6 +1,6 @@
 {
   "name": "xdns",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "A DNS server for web / app developers . Easy to config.",
   "main": "index.js",
   "bin":{
