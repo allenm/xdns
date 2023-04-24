@@ -1,6 +1,6 @@
 {
   "name": "xdns",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A DNS server for web / app developers . Easy to config.",
   "main": "index.js",
   "bin":{
@@ -23,10 +23,10 @@
     "email":"menghonglun@gmail.com"
   },
   "dependencies":{
-    "native-dns":">=0.4.1",
-    "ipaddr.js":">= 0.1.1",
-    "commander":"*",
-    "colors":"*"
+    "native-dns":"^0.7.0",
+    "ipaddr.js":"^2.0.1",
+    "commander":"^10.0.1",
+    "colors":"^1.4.0"
   },
   "license": "BSD-3-Clause"
 }

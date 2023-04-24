@@ -15,14 +15,14 @@ var tcpServer = dns.createTCPServer();
 var server = dns.createServer();
 var remoteDns = '8.8.8.8';
 
-var ehosts = require('./ehosts');
+var hosts = require('./hosts');
 
 var onMessage = function(request,response){
 
     var name = request.question[0].name;
     var type = request.question[0].type;
 
-    var localMatch = ehosts.query(name);
+    var localMatch = hosts.query(name);
     if(type ===1 && localMatch){ // type === 1 表明是 A 记录
         console.log('>>'.info + 'local matched, resolve '+ name + ' to '+ localMatch);
         response.answer.push(dns.A({
@@ -131,7 +131,6 @@ function getUserHome() {
 
 exports.init = function(config){
 
-    var hostsFile = '';
     var hostsArr = config.hostsArr || [];
     if(config.dns){
         if(!ipaddr.isValid(config.dns)){
@@ -164,15 +163,14 @@ exports.init = function(config){
     var log = 'The remote dns is : ' + remoteDns
     console.log(log.info);
 
-    if(config.file){
-        hostsFile = config.file.replace(/^~\//,getUserHome());
-        hostsFile = path.resolve(hostsFile);
-    }
+    const hostsFile = config.file ? path.resolve(config.file) : path.resolve(getUserHome(), '.xdns');
 
-    ehosts.initWithFile(hostsFile);
-    ehosts.initWithArr(hostsArr);
+    console.log(`use config file: ${hostsFile}`.info)
 
-    var allHosts = ehosts.getAllHosts();
+    hosts.initWithFile(hostsFile);
+    hostsArr && hosts.initWithArr(hostsArr);
+
+    var allHosts = hosts.getAllHosts();
     console.log('-------------------');
     if(allHosts.length>0){
         console.log('The hosts list you config is: '.info);

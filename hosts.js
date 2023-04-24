@@ -7,14 +7,8 @@ var ipaddr = require('ipaddr.js');
 
 require('./customcolors');
 
-var defaultHosts = getUserHome() + '/.xdns';
-
 var staticHosts = {};
 var smartHosts = [];
-
-function getUserHome() {
-    return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
-}
 
 function query(host){
     if(staticHosts[host]){
@@ -48,7 +42,7 @@ function getAllHosts(){
 
 function initWithFile(fpath){
 
-    var fpath = fpath || defaultHosts;
+    var fpath = fpath;
 
     try{
         var data = fs.readFileSync(fpath,{
@@ -57,7 +51,7 @@ function initWithFile(fpath){
         var hostsArr = data.split('\n');
         initWithArr(hostsArr);
     }catch(e){
-
+        console.error(`read hosts file ${fpath} fail: ${e.message}`.error);
     }
 
 

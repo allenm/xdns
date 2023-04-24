@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var program = require('commander');
-var cdns = require('../index');
+var xnds = require('../index');
 
 program
     .version(require('../package.json').version)
@@ -9,5 +9,4 @@ program
     .option('-d, --dns <ip>','remote dns server , default is your network\'s dns')
     .parse(process.argv);
 
-
-cdns.init(program);
+xnds.init(program.opts());
